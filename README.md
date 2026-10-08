@@ -9,6 +9,8 @@ Salesforce app for tracking the yearly inspections of US medical facilities. It 
 
 Architecture, data model, security model and diagrams: [docs/Solution-Architecture.md](docs/Solution-Architecture.md)
 
+How the project was built (datasets, prompts, iterations, learnings): [docs/Project-Documentation.md](docs/Project-Documentation.md)
+
 ## Project layout
 
 | Path | Contents |
