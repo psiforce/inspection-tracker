@@ -1,0 +1,46 @@
+<template>
+  <figure class="chart" aria-label={chartLabel}>
+    <template lwc:if={hasRows}>
+      <ul class="bars" aria-hidden="true">
+        <template for:each={rows} for:item="row">
+          <li key={row.key} class="bars__row" title={row.display}>
+            <span class="bars__label">{row.label}</span>
+            <span class="bars__track">
+              <template lwc:if={row.hasValue}>
+                <span class="bars__bar" style={row.barStyle}></span>
+              </template>
+            </span>
+            <span class={row.valueClass}>
+              {row.display}
+              <template lwc:if={row.note}>
+                <span class="bars__note">{row.note}</span>
+              </template>
+            </span>
+          </li>
+        </template>
+      </ul>
+      <table class="sr-only">
+        <caption>
+          {chartLabel}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Group</th>
+            <th scope="col">{valueHeading}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template for:each={rows} for:item="row">
+            <tr key={row.key}>
+              <th scope="row">{row.label}</th>
+              <td>{row.display}</td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </template>
+    <template lwc:else>
+      <p class="bars__empty">No data for this selection.</p>
+    </template>
+  </figure>
+</template>

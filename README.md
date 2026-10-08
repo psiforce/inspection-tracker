@@ -4,6 +4,7 @@ Salesforce app for tracking the yearly inspections of US medical facilities. It 
 
 - **Internal app:** *Inspection Tracker*, with Accounts (record type *Medical Facility*), Inspections, reports and the *Inspection Compliance* dashboard.
 - **Automation:** completing an inspection schedules the next one (+365 days if it passed, +30 days for a re-inspection if it failed), assigns an inspector by state and updates the facility's status.
+- **National Insights:** public dashboards at `/insights`, with KPIs, a state compliance map, quarterly result trends, most-cited deficiency areas and facility-type/region comparisons.
 - **Public portal:** the `facilityInspectionPortal` Lightning Web Component provides search by name, city or ZIP; state, status and type filters; a status-colored US map; and inspection history.
 
 Architecture, data model, security model and diagrams: [docs/Solution-Architecture.md](docs/Solution-Architecture.md)
@@ -38,7 +39,7 @@ sf apex run --file scripts/apex/seedData.apex
 
 ### Public portal (Experience Cloud)
 
-Live demo site: https://orgfarm-24624b149c-dev-ed.develop.my.site.com/inspections
+Live demo site: https://orgfarm-24624b149c-dev-ed.develop.my.site.com/inspections (facility search) and https://orgfarm-24624b149c-dev-ed.develop.my.site.com/inspections/insights (national insights dashboards)
 
 To set it up in a new org:
 

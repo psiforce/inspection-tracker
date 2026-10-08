@@ -5,6 +5,17 @@ const ALL = { label: "All", value: "" };
 export default class FacilitySearchFilters extends LightningElement {
   @api options;
 
+  /** Pre-selected state, e.g. from a ?state= link. Applied without firing filterchange. */
+  @api
+  get initialState() {
+    return this.state;
+  }
+  set initialState(value) {
+    if (value && !this.state) {
+      this.state = value;
+    }
+  }
+
   searchTerm = "";
   state = "";
   status = "";

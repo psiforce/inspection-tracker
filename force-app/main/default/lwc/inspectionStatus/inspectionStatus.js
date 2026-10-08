@@ -84,3 +84,64 @@ export function formatAddress(facility) {
     .join(", ");
   return [facility.street, cityLine].filter(Boolean).join(", ");
 }
+
+// ---------- National Insights charts ----------
+
+/**
+ * Result colors for the trend chart. Validated as a set (CVD-safe, normal-vision distinct);
+ * the amber is below 3:1 on white, so the chart always ships a legend and a data table.
+ */
+export const RESULT_COLORS = {
+  passed: "#1c8a4a",
+  conditional: "#e0a21a",
+  failed: "#c62f2f"
+};
+
+/** Single-series bar color (sequential blue, step 450). */
+export const BAR_COLOR = "#2a78d6";
+
+/** Sequential blue bins for "% of facilities compliant" on the state map. */
+export const COMPLIANCE_BINS = [
+  { min: 85, label: "85–100%", fill: "#184f95", ink: "#ffffff" },
+  { min: 70, label: "70–84%", fill: "#3987e5", ink: "#ffffff" },
+  { min: 50, label: "50–69%", fill: "#86b6ef", ink: "#0d366b" },
+  { min: 0, label: "Under 50%", fill: "#cde2fb", ink: "#0d366b" }
+];
+export const NO_DATA_BIN = {
+  label: "No listed facilities",
+  fill: "#eef1f3",
+  ink: "#6b7a83"
+};
+
+export function complianceBin(pct) {
+  if (pct === null || pct === undefined) {
+    return NO_DATA_BIN;
+  }
+  return COMPLIANCE_BINS.find((bin) => pct >= bin.min) || COMPLIANCE_BINS[3];
+}
+
+export function formatPct(value) {
+  return value === null || value === undefined
+    ? "—"
+    : `${Number(value).toFixed(1)}%`;
+}
+
+export function formatScore(value) {
+  return value === null || value === undefined ? "—" : Number(value).toFixed(1);
+}
+
+export function formatCount(value) {
+  return value === null || value === undefined
+    ? "—"
+    : Number(value).toLocaleString("en-US");
+}
+
+/** Smallest "nice" axis maximum (1, 2, 2.5, 5 x 10^n) at or above the data maximum. */
+export function niceMax(value) {
+  if (!value || value <= 0) {
+    return 1;
+  }
+  const magnitude = 10 ** Math.floor(Math.log10(value));
+  const step = [1, 2, 2.5, 5, 10].find((m) => m * magnitude >= value);
+  return step * magnitude;
+}

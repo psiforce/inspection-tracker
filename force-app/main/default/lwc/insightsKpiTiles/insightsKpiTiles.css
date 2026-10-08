@@ -1,0 +1,62 @@
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  display: grid;
+  gap: 0.125rem;
+  align-content: start;
+  padding: 0.875rem 1rem;
+  background: var(--portal-surface, #ffffff);
+  border: 1px solid var(--portal-line, #d8e0e4);
+  border-top: 3px solid var(--portal-accent, #0b6e7f);
+  border-radius: 0.5rem;
+}
+
+.tile_ok {
+  border-top-color: #1c8a4a;
+}
+
+.tile_overdue {
+  border-top-color: #8e1f5b;
+}
+
+.tile_bad {
+  border-top-color: #c62f2f;
+}
+
+.tile__label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--portal-muted, #55666f);
+}
+
+.tile__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: var(--portal-fg, #17242b);
+}
+
+.tile__detail {
+  font-size: 0.75rem;
+  color: var(--portal-muted, #55666f);
+}
+
+@media (max-width: 1100px) {
+  .tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

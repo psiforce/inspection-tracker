@@ -1,0 +1,168 @@
+<template>
+  <figure class="chart" aria-label={chartLabel}>
+    <ul class="chart__legend">
+      <template for:each={legend} for:item="item">
+        <li key={item.key}>
+          <span class="chart__swatch" style={item.style}></span>{item.label}
+        </li>
+      </template>
+      <li><span class="trend__line-swatch"></span>Average score</li>
+    </ul>
+    <div class="trend__plot">
+      <svg
+        viewBox={viewBox}
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <text class="trend__title" x={labelX} y={columnsTitleY}>
+          Completed inspections
+        </text>
+        <template for:each={countGrid} for:item="g">
+          <g key={g.key}>
+            <line
+              class="chart__grid"
+              x1={g.x1}
+              x2={g.x2}
+              y1={g.y}
+              y2={g.y}
+            ></line>
+            <text
+              class="chart__axis-label"
+              x={g.labelX}
+              y={g.labelY}
+              text-anchor="end"
+            >
+              {g.label}
+            </text>
+          </g>
+        </template>
+        <template for:each={columns} for:item="col">
+          <g key={col.key}>
+            <template for:each={col.segments} for:item="seg">
+              <path key={seg.key} d={seg.d} fill={seg.fill}></path>
+            </template>
+            <text
+              class="chart__axis-label"
+              x={col.cx}
+              y={col.quarterY}
+              text-anchor="middle"
+            >
+              {col.quarterLabel}
+            </text>
+            <text
+              class="trend__year"
+              x={col.cx}
+              y={col.yearY}
+              text-anchor="middle"
+            >
+              {col.yearLabel}
+            </text>
+          </g>
+        </template>
+
+        <text class="trend__title" x={labelX} y={scoreTitleY}>
+          Average score (0–100)
+        </text>
+        <template for:each={scoreGrid} for:item="g">
+          <g key={g.key}>
+            <line
+              class="chart__grid"
+              x1={g.x1}
+              x2={g.x2}
+              y1={g.y}
+              y2={g.y}
+            ></line>
+            <text
+              class="chart__axis-label"
+              x={g.labelX}
+              y={g.labelY}
+              text-anchor="end"
+            >
+              {g.label}
+            </text>
+          </g>
+        </template>
+        <path class="trend__score-line" d={scoreLine}></path>
+        <template for:each={scorePoints} for:item="p">
+          <circle
+            key={p.key}
+            class="trend__score-point"
+            cx={p.cx}
+            cy={p.cy}
+            r="4"
+          ></circle>
+        </template>
+        <template lwc:if={lastScoreLabel}>
+          <text
+            class="trend__score-label"
+            x={lastScoreLabel.x}
+            y={lastScoreLabel.y}
+            text-anchor="middle"
+          >
+            {lastScoreLabel.text}
+          </text>
+        </template>
+      </svg>
+      <svg
+        class="trend__hits"
+        viewBox={viewBox}
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <template for:each={columns} for:item="col">
+          <rect
+            key={col.key}
+            class="chart__hit"
+            x={col.hitX}
+            y={hitTop}
+            width={col.hitW}
+            height={hitH}
+            tabindex="0"
+            role="img"
+            aria-label={col.ariaLabel}
+            data-index={col.index}
+            onmouseenter={handleEnter}
+            onfocus={handleEnter}
+            onmouseleave={handleLeave}
+            onblur={handleLeave}
+          ></rect>
+        </template>
+      </svg>
+      <template lwc:if={tooltip}>
+        <div class="chart__tooltip" style={tooltip.style} aria-hidden="true">
+          <span class="chart__tooltip-title">{tooltip.title}</span>
+          <template for:each={tooltip.rows} for:item="row">
+            <span key={row.key} class="chart__tooltip-row">
+              <span class="chart__swatch" style={row.swatch}></span>
+              {row.label}: <strong>{row.value}</strong>
+            </span>
+          </template>
+        </div>
+      </template>
+    </div>
+    <table class="sr-only">
+      <caption>
+        {chartLabel}
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Quarter</th>
+          <th scope="col">Passed</th>
+          <th scope="col">Passed with conditions</th>
+          <th scope="col">Failed</th>
+          <th scope="col">Average score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template for:each={tableRows} for:item="row">
+          <tr key={row.key}>
+            <th scope="row">{row.label}</th>
+            <td>{row.passed}</td>
+            <td>{row.conditional}</td>
+            <td>{row.failed}</td>
+            <td>{row.score}</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </figure>
+</template>

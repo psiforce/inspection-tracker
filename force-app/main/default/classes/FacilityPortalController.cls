@@ -102,9 +102,7 @@ public with sharing class FacilityPortalController {
   @AuraEnabled(cacheable=true)
   public static FacilityDetail getFacilityDetail(Id facilityId) {
     if (facilityId == null) {
-      throw portalException(
-        'Choose a facility to see its inspection history.'
-      );
+      throw portalException('Choose a facility to see its inspection history.');
     }
     List<Account> facilities;
     try {
@@ -150,9 +148,7 @@ public with sharing class FacilityPortalController {
       throw portalError(e);
     }
     if (facilities.isEmpty()) {
-      throw portalException(
-        'This facility is not listed on the portal.'
-      );
+      throw portalException('This facility is not listed on the portal.');
     }
     return new FacilityDetail(facilities[0]);
   }

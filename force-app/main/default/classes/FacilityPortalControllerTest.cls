@@ -1,7 +1,5 @@
 @IsTest
 private class FacilityPortalControllerTest {
-  private static final String PORTAL_USERNAME_PREFIX = 'portal.reader.';
-
   @TestSetup
   static void setup() {
     List<Account> facilities = new List<Account>{
@@ -36,35 +34,12 @@ private class FacilityPortalControllerTest {
       Date.today().addDays(-5)
     );
 
-    // Setup objects go in a separate runAs block to avoid mixed DML.
-    System.runAs(new User(Id = UserInfo.getUserId())) {
-      User reader = newUser('Standard User', PORTAL_USERNAME_PREFIX);
-      insert reader;
-      insert new PermissionSetAssignment(
-        AssigneeId = reader.Id,
-        PermissionSetId = [
-          SELECT Id
-          FROM PermissionSet
-          WHERE Name = 'Inspection_Portal_Guest'
-        ]
-        .Id
-      );
-    }
-  }
-
-  /** A user with exactly the guest permission set, standing in for the site guest user. */
-  private static User portalReader() {
-    return [
-      SELECT Id
-      FROM User
-      WHERE Username LIKE :PORTAL_USERNAME_PREFIX + '%'
-      LIMIT 1
-    ];
+    InspectionTestDataFactory.createPortalReader();
   }
 
   @IsTest
   static void searchWithoutFiltersReturnsListedFacilitiesOnly() {
-    System.runAs(portalReader()) {
+    System.runAs(InspectionTestDataFactory.portalReader()) {
       List<FacilityPortalController.FacilitySummary> results = FacilityPortalController.searchFacilities(
         null,
         null,
@@ -83,7 +58,7 @@ private class FacilityPortalControllerTest {
 
   @IsTest
   static void searchByTermMatchesNameCityOrZip() {
-    System.runAs(portalReader()) {
+    System.runAs(InspectionTestDataFactory.portalReader()) {
       Assert.areEqual(
         1,
         FacilityPortalController.searchFacilities('lakeview', null, null, null)
@@ -115,7 +90,7 @@ private class FacilityPortalControllerTest {
 
   @IsTest
   static void searchByStateStatusAndType() {
-    System.runAs(portalReader()) {
+    System.runAs(InspectionTestDataFactory.portalReader()) {
       Assert.areEqual(
         1,
         FacilityPortalController.searchFacilities(null, 'Texas', null, null)
@@ -163,7 +138,7 @@ private class FacilityPortalControllerTest {
       FROM Account
       WHERE Name = 'Lakeview General Hospital of Austin'
     ];
-    System.runAs(portalReader()) {
+    System.runAs(InspectionTestDataFactory.portalReader()) {
       FacilityPortalController.FacilityDetail detail = FacilityPortalController.getFacilityDetail(
         facility.Id
       );
@@ -189,7 +164,7 @@ private class FacilityPortalControllerTest {
   @IsTest
   static void detailRejectsUnlistedOrMissingFacility() {
     Account hidden = [SELECT Id FROM Account WHERE Name = 'Hidden Clinic'];
-    System.runAs(portalReader()) {
+    System.runAs(InspectionTestDataFactory.portalReader()) {
       try {
         FacilityPortalController.getFacilityDetail(hidden.Id);
         Assert.fail('Unlisted facility should not be returned');
@@ -210,7 +185,10 @@ private class FacilityPortalControllerTest {
 
   @IsTest
   static void userWithoutFieldAccessGetsFriendlyError() {
-    User noAccess = newUser('Standard User', 'no.access.');
+    User noAccess = InspectionTestDataFactory.newUser(
+      'Standard User',
+      'no.access.'
+    );
     insert noAccess;
     System.runAs(noAccess) {
       try {
@@ -226,7 +204,7 @@ private class FacilityPortalControllerTest {
 
   @IsTest
   static void filterOptionsListStatesTypesAndStatuses() {
-    System.runAs(portalReader()) {
+    System.runAs(InspectionTestDataFactory.portalReader()) {
       FacilityPortalController.FilterOptions options = FacilityPortalController.getFilterOptions();
       Assert.areEqual(50, options.states.size());
       Assert.areEqual('Alabama', options.states[0].value);
@@ -243,22 +221,6 @@ private class FacilityPortalControllerTest {
     Assert.areEqual(
       '50\\% off\\_now',
       FacilityPortalController.escapeLike('50% off_now')
-    );
-  }
-
-  private static User newUser(String profileName, String usernamePrefix) {
-    String unique = String.valueOf(Crypto.getRandomInteger()).remove('-');
-    return new User(
-      Alias = unique.left(8),
-      Email = 'reader@inspection-tracker.test',
-      Username = usernamePrefix + unique + '@inspection-tracker.test',
-      LastName = 'Reader',
-      ProfileId = [SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1]
-      .Id,
-      TimeZoneSidKey = 'America/Chicago',
-      LocaleSidKey = 'en_US',
-      EmailEncodingKey = 'UTF-8',
-      LanguageLocaleKey = 'en_US'
     );
   }
 }

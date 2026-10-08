@@ -48,6 +48,18 @@
   color: var(--portal-muted);
 }
 
+.portal__link {
+  justify-self: start;
+  font-weight: 600;
+  color: var(--portal-accent);
+  text-decoration: none;
+}
+
+.portal__link:hover,
+.portal__link:focus-visible {
+  text-decoration: underline;
+}
+
 .portal__filters {
   padding: 1rem;
   background: var(--portal-surface);

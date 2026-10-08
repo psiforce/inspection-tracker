@@ -1,0 +1,50 @@
+@import "c/portalStyles";
+
+.trend__plot {
+  position: relative;
+}
+
+/* Transparent hit layer drawn over the chart for hover and keyboard focus. */
+.trend__hits {
+  position: absolute;
+  inset: 0;
+}
+
+.trend__title {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--portal-fg, #17242b);
+}
+
+.trend__year {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--portal-fg, #17242b);
+}
+
+.trend__score-line {
+  fill: none;
+  stroke: #17242b;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.trend__score-point {
+  fill: #17242b;
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.trend__score-label {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--portal-fg, #17242b);
+}
+
+.trend__line-swatch {
+  width: 1rem;
+  height: 2px;
+  background: #17242b;
+  border-radius: 1px;
+}

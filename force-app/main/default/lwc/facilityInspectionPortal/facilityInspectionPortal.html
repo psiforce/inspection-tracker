@@ -4,11 +4,15 @@
       <p class="portal__eyebrow">Public inspection records</p>
       <h1 class="portal__title">{heading}</h1>
       <p class="portal__intro">{introText}</p>
+      <a class="portal__link" href={insightsUrl}
+        >See national inspection trends →</a
+      >
     </header>
 
     <section class="portal__filters" aria-label="Search and filters">
       <c-facility-search-filters
         options={filterOptions}
+        initial-state={initialState}
         onfilterchange={handleFilterChange}
       ></c-facility-search-filters>
     </section>

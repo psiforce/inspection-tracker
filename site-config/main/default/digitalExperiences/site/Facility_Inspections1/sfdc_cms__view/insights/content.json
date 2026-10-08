@@ -1,0 +1,81 @@
+{
+  "type": "sfdc_cms__view",
+  "title": "Insights",
+  "contentBody": {
+    "component": {
+      "children": [
+        {
+          "children": [
+            {
+              "attributes": {
+                "backgroundImageConfig": "",
+                "backgroundImageOverlay": "rgba(0,0,0,0)",
+                "componentSpacerSize": "",
+                "layoutDirectionDesktop": "row",
+                "layoutDirectionMobile": "column",
+                "layoutDirectionTablet": "column",
+                "maxContentWidth": "",
+                "sectionColumnGutterWidth": "",
+                "sectionConfig": "{\"UUID\":\"c3e6a014-5d7f-4e80-ab12-3c4d5e6f7a82\",\"columns\":[{\"UUID\":\"d4f7b125-6e80-4f91-bc23-4d5e6f7a8b93\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+                "sectionMinHeight": "",
+                "sectionVerticalAlign": "flex-start"
+              },
+              "children": [
+                {
+                  "children": [
+                    {
+                      "attributes": {
+                        "heading": "National Inspection Insights",
+                        "introText": "How licensed medical facilities across the United States are doing on their yearly inspections."
+                      },
+                      "definition": "c:inspectionInsights",
+                      "id": "18dbf569-a2c4-43d5-f067-8b9cadbecfd7",
+                      "type": "component"
+                    }
+                  ],
+                  "id": "d4f7b125-6e80-4f91-bc23-4d5e6f7a8b93",
+                  "name": "col1",
+                  "title": "Column 1",
+                  "type": "region"
+                }
+              ],
+              "definition": "community_layout:section",
+              "id": "c3e6a014-5d7f-4e80-ab12-3c4d5e6f7a82",
+              "type": "component"
+            }
+          ],
+          "id": "b2d5f903-4c6e-4d7f-9a01-2b3c4d5e6f71",
+          "name": "content",
+          "title": "Content",
+          "type": "region"
+        },
+        {
+          "children": [
+            {
+              "attributes": {
+                "customHeadTags": "",
+                "description": "",
+                "pageTitle": "National Inspection Insights",
+                "recordId": "{!recordId}"
+              },
+              "definition": "community_builder:seoAssistant",
+              "id": "07cae458-91b3-42c4-ef56-7a8b9cadbec6",
+              "type": "component"
+            }
+          ],
+          "id": "f6b9d347-80a2-41b3-de45-6f7a8b9cadb5",
+          "name": "sfdcHiddenRegion",
+          "title": "sfdcHiddenRegion",
+          "type": "region"
+        }
+      ],
+      "definition": "community_layout:sldsFlexibleLayout",
+      "id": "a1c4e8f2-3b5d-4c6e-8f90-1a2b3c4d5e60",
+      "type": "component"
+    },
+    "dataProviders": [],
+    "themeLayoutType": "Inner",
+    "viewType": "custom-insights"
+  },
+  "urlName": "insights"
+}

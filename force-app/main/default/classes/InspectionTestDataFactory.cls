@@ -49,4 +49,51 @@ public class InspectionTestDataFactory {
       ORDER BY Scheduled_Date__c
     ];
   }
+
+  public static final String PORTAL_READER_PREFIX = 'portal.reader.';
+
+  public static User newUser(String profileName, String usernamePrefix) {
+    String unique = String.valueOf(Crypto.getRandomInteger()).remove('-');
+    return new User(
+      Alias = unique.left(8),
+      Email = 'reader@inspection-tracker.test',
+      Username = usernamePrefix + unique + '@inspection-tracker.test',
+      LastName = 'Reader',
+      ProfileId = [SELECT Id FROM Profile WHERE Name = :profileName LIMIT 1]
+      .Id,
+      TimeZoneSidKey = 'America/Chicago',
+      LocaleSidKey = 'en_US',
+      EmailEncodingKey = 'UTF-8',
+      LanguageLocaleKey = 'en_US'
+    );
+  }
+
+  /**
+   * Creates a user with only the Inspection_Portal_Guest permission set, standing in for
+   * the site guest user. Call from @TestSetup; runs in its own runAs block to avoid mixed DML.
+   */
+  public static void createPortalReader() {
+    System.runAs(new User(Id = UserInfo.getUserId())) {
+      User reader = newUser('Standard User', PORTAL_READER_PREFIX);
+      insert reader;
+      insert new PermissionSetAssignment(
+        AssigneeId = reader.Id,
+        PermissionSetId = [
+          SELECT Id
+          FROM PermissionSet
+          WHERE Name = 'Inspection_Portal_Guest'
+        ]
+        .Id
+      );
+    }
+  }
+
+  public static User portalReader() {
+    return [
+      SELECT Id
+      FROM User
+      WHERE Username LIKE :PORTAL_READER_PREFIX + '%'
+      LIMIT 1
+    ];
+  }
 }

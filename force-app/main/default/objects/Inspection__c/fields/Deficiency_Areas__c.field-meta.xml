@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Deficiency_Areas__c</fullName>
+    <description>Areas where deficiencies were cited. Shown on the public portal and aggregated on the National Insights page.</description>
+    <inlineHelpText>Choose every area where a deficiency was cited. Leave blank when none were cited.</inlineHelpText>
+    <label>Deficiency Areas</label>
+    <required>false</required>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Infection Control</fullName>
+                <default>false</default>
+                <label>Infection Control</label>
+            </value>
+            <value>
+                <fullName>Medication Storage</fullName>
+                <default>false</default>
+                <label>Medication Storage</label>
+            </value>
+            <value>
+                <fullName>Fire and Life Safety</fullName>
+                <default>false</default>
+                <label>Fire and Life Safety</label>
+            </value>
+            <value>
+                <fullName>Staff Credentialing Records</fullName>
+                <default>false</default>
+                <label>Staff Credentialing Records</label>
+            </value>
+            <value>
+                <fullName>Emergency Preparedness</fullName>
+                <default>false</default>
+                <label>Emergency Preparedness</label>
+            </value>
+            <value>
+                <fullName>Sterilization Logs</fullName>
+                <default>false</default>
+                <label>Sterilization Logs</label>
+            </value>
+            <value>
+                <fullName>Patient Records Privacy</fullName>
+                <default>false</default>
+                <label>Patient Records Privacy</label>
+            </value>
+            <value>
+                <fullName>Equipment Maintenance</fullName>
+                <default>false</default>
+                <label>Equipment Maintenance</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

@@ -1,0 +1,178 @@
+<template>
+  <div class="insights">
+    <header class="insights__header">
+      <div class="insights__headline">
+        <p class="insights__eyebrow">Public inspection records</p>
+        <h1 class="insights__title">{heading}</h1>
+        <p class="insights__intro">{introText}</p>
+      </div>
+      <a class="insights__link" href={searchUrl}>Find a facility →</a>
+    </header>
+
+    <div class="insights__toolbar">
+      <lightning-combobox
+        class="insights__filter"
+        label="Facility type"
+        value={facilityType}
+        options={typeOptions}
+        onchange={handleTypeChange}
+      ></lightning-combobox>
+      <template lwc:if={insights}>
+        <p class="insights__asof">Showing {scopeLabel} · Data as of {asOf}</p>
+      </template>
+    </div>
+
+    <template lwc:if={error}>
+      <p class="insights__error" role="alert">{error}</p>
+    </template>
+
+    <template lwc:if={isLoading}>
+      <div class="insights__loading">
+        <lightning-spinner
+          alternative-text="Loading inspection statistics"
+          size="medium"
+        ></lightning-spinner>
+      </div>
+    </template>
+
+    <template lwc:if={insights}>
+      <c-insights-kpi-tiles kpis={insights.kpis}></c-insights-kpi-tiles>
+
+      <section class="card" aria-labelledby="findings-heading">
+        <h2 class="card__title" id="findings-heading">Key findings</h2>
+        <ul class="findings">
+          <template for:each={findings} for:item="f">
+            <li key={f.key} class="finding">
+              <span class="finding__title">{f.title}</span>
+              <span class="finding__text">{f.text}</span>
+            </li>
+          </template>
+        </ul>
+      </section>
+
+      <div class="grid grid_map">
+        <section class="card" aria-labelledby="map-heading">
+          <h2 class="card__title" id="map-heading">Compliance by state</h2>
+          <p class="card__subtitle">
+            Share of listed facilities whose latest inspection passed. Select a
+            state to see its facilities.
+          </p>
+          <c-us-state-tile-map
+            states={insights.states}
+            search-url={searchUrl}
+          ></c-us-state-tile-map>
+        </section>
+        <section class="card" aria-labelledby="attention-heading">
+          <h2 class="card__title" id="attention-heading">
+            States needing attention
+          </h2>
+          <p class="card__subtitle">Most overdue or failing facilities.</p>
+          <template lwc:if={hasAttentionStates}>
+            <ul class="attention">
+              <template for:each={attentionStates} for:item="s">
+                <li key={s.key}>
+                  <a class="attention__link" href={s.href}>
+                    <span class="attention__name">{s.name}</span>
+                    <span class="attention__detail">{s.detail}</span>
+                  </a>
+                </li>
+              </template>
+            </ul>
+          </template>
+          <template lwc:else>
+            <p class="card__subtitle">
+              No overdue or failing facilities right now.
+            </p>
+          </template>
+        </section>
+      </div>
+
+      <section class="card" aria-labelledby="trend-heading">
+        <h2 class="card__title" id="trend-heading">
+          Inspection results over time
+        </h2>
+        <p class="card__subtitle">
+          Completed inspections per quarter by result, last 3 years. The current
+          quarter is partial.
+        </p>
+        <c-insights-trend-chart
+          quarters={insights.trend}
+        ></c-insights-trend-chart>
+      </section>
+
+      <div class="grid grid_two">
+        <section class="card" aria-labelledby="deficiency-heading">
+          <h2 class="card__title" id="deficiency-heading">
+            Most-cited deficiency areas
+          </h2>
+          <p class="card__subtitle">
+            Citations in the last 24 months. One inspection can cite more than
+            one area.
+          </p>
+          <c-insights-bar-chart
+            items={deficiencyItems}
+            format="count"
+            chart-label="Deficiency citations by area, last 24 months"
+            value-heading="Citations"
+          ></c-insights-bar-chart>
+        </section>
+        <section class="card" aria-labelledby="aging-heading">
+          <h2 class="card__title" id="aging-heading">
+            How long facilities are overdue
+          </h2>
+          <p class="card__subtitle">
+            Overdue facilities by days past their inspection due date.
+          </p>
+          <c-insights-bar-chart
+            items={agingItems}
+            format="count"
+            chart-label="Overdue facilities by days overdue"
+            value-heading="Facilities"
+          ></c-insights-bar-chart>
+        </section>
+      </div>
+
+      <section class="card" aria-labelledby="compare-heading">
+        <div class="card__head">
+          <div>
+            <h2 class="card__title" id="compare-heading">
+              Compare facility types and regions
+            </h2>
+            <p class="card__subtitle">{metricConfig.heading}.</p>
+          </div>
+          <lightning-radio-group
+            class="compare__metric"
+            label="Measure"
+            variant="label-hidden"
+            type="button"
+            options={metricOptions}
+            value={metric}
+            onchange={handleMetricChange}
+          ></lightning-radio-group>
+        </div>
+        <div class="grid grid_two grid_flat">
+          <div>
+            <h3 class="card__subheading">By facility type</h3>
+            <c-insights-bar-chart
+              items={typeItems}
+              format={metricConfig.format}
+              max={metricConfig.max}
+              chart-label={typeChartLabel}
+              value-heading={metricConfig.label}
+            ></c-insights-bar-chart>
+          </div>
+          <div>
+            <h3 class="card__subheading">By region</h3>
+            <c-insights-bar-chart
+              items={regionItems}
+              format={metricConfig.format}
+              max={metricConfig.max}
+              chart-label={regionChartLabel}
+              value-heading={metricConfig.label}
+            ></c-insights-bar-chart>
+          </div>
+        </div>
+      </section>
+    </template>
+  </div>
+</template>

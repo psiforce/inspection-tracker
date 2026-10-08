@@ -96,9 +96,12 @@ flowchart LR
 | Apex class | `InspectionSchedulingService` | Creates the follow-up inspection |
 | Apex class | `StateAssignments` | Cached lookup of state assignments by code or name |
 | Apex class | `FacilityPortalController` | Read-only API for the portal; returns DTOs |
+| Apex class | `InspectionInsightsController` | Read-only national statistics for the Insights page (aggregates only) |
 | Apex class | `InspectionSampleData` | Seeds 150 demo facilities |
 | LWC | `facilityInspectionPortal` | Portal page: header, filters, stats, map, results and detail |
 | LWC | `facilitySearchFilters`, `facilityMap`, `facilityDetail` | Child components |
+| LWC | `inspectionInsights` | National Insights page: KPIs, key findings, state map, trend, deficiencies, comparisons |
+| LWC | `insightsKpiTiles`, `usStateTileMap`, `insightsTrendChart`, `insightsBarChart` | Hand-built SVG/CSS charts (no chart library) |
 | LWC modules | `inspectionStatus` (JS), `portalStyles` (CSS) | Shared status colors, formatting and pill styles |
 | Permission sets | `Inspection_Portal_Guest`, `Inspector`, `Inspection_Tracker_Admin` | Access model |
 | Guest sharing rule | `Account.Public_Medical_Facilities` | Guest read on listed facilities (`site-config/`) |
@@ -144,6 +147,7 @@ erDiagram
 | `Completed_Date__c` | Date | Public | Defaults to today when a result is set |
 | `Score__c` | Number(3,0) | Public | Validated to 0–100 |
 | `Public_Summary__c` | Long text | Public | Shown on the portal |
+| `Deficiency_Areas__c` | Multi-select picklist (8 areas) | Public | Areas cited; aggregated on the Insights page |
 | `Inspector__c` | Lookup (User) | **Internal** | Auto-assigned |
 | `Internal_Notes__c` | Long text | **Internal** | Never queried by the portal |
 
@@ -216,7 +220,32 @@ sequenceDiagram
 3. It resolves `Inspector_Username__c` to an active User in one query.
 4. If there is no row, no username, or the user is inactive, the facility owner gets the inspection, so new inspections are never left unassigned.
 
-## 6. Security architecture
+## 6. National Insights (public dashboards)
+
+Salesforce report dashboards can't be shown to guest users, so the portal's **/insights** page is built from custom LWCs and one read-only Apex endpoint, `InspectionInsightsController.getNationalInsights(facilityType)`.
+
+| Panel | What it shows | Data |
+| --- | --- | --- |
+| KPI tiles | % compliant, overdue, failing, 12-month fail rate, 12-month average score, due in 90 days | Facilities + completed inspections |
+| Key findings | Three sentences computed from the data: fail-rate change this year vs last, top deficiency area, overdue concentration | Derived on the client |
+| Compliance by state | 50-state tile map shaded by % compliant (sequential blue, 4 bins + "no facilities"); each tile links to `/?state=<name>` on the search page | Facilities by `BillingState` |
+| States needing attention | Up to 8 states with the most overdue or failing facilities | Same |
+| Results over time | 12 quarters of stacked results (Passed / Passed with conditions / Failed), with a separate average-score panel on the same quarters (no dual axis) | Completed inspections |
+| Most-cited deficiency areas | Citations per area, last 24 months | `Deficiency_Areas__c` |
+| How long facilities are overdue | 1–30, 31–90 and over 90 days | `Next_Inspection_Due__c` |
+| Compare types and regions | Fail rate, overdue share or average score by facility type and region (toggle) | Both |
+
+**Design notes**
+- The response contains only aggregates: no record IDs, inspector names or internal notes. Queries run in `USER_MODE` under the same guest sharing rule and permission set as the search API, so unlisted facilities are never counted.
+- Aggregation happens in Apex loops, because `Portal_Status__c` is a formula and can't be grouped in SOQL. Input is capped at 10,000 facilities and 20,000 inspections. The method is `cacheable=true`.
+- Charts follow the data-visualization checks: the result colors were validated for color-vision deficiency; there are legends, direct labels and hover/focus tooltips; and every chart has a screen-reader data table.
+
+**Top insights from the demo data** (illustrative, because the data is generated):
+1. The fail rate rose from 9.2% (2025) to 16.8% (2026 so far), and the average score fell from 88.1 to 85.7.
+2. Infection control is the most-cited deficiency area, followed by patient-records privacy and emergency preparedness.
+3. 11 facilities (7.3%) are overdue, 3 of them by more than 90 days. Hospitals and clinics run about 11% overdue, versus 0% for urgent care. Wyoming has all 3 of its facilities overdue or failing.
+
+## 7. Security architecture
 
 The guest user is the main risk, so it is restricted in several separate ways:
 
@@ -246,7 +275,7 @@ The automation services (`InspectorAssignmentService`, `FacilityRollupService`, 
 
 Guest-site limits to keep in mind: the portal is cached (`cacheable=true`), and Salesforce rate-limits guest requests per site, which is enough for a public lookup tool.
 
-## 7. Integration and extensibility
+## 8. Integration and extensibility
 
 - **Maps:** `lightning-map` renders Google Maps tiles through Salesforce's own proxy, with no API key or CSP entry. Markers use SVG `mapIcon` paths colored by status.
 - **Real facility data:** load a CSV (for example CMS Provider of Services data) with Data Loader, upserting on `License_Number__c`. If the rows lack coordinates, turn on the Geocodes for Account Billing Address data integration rule.
@@ -254,7 +283,7 @@ Guest-site limits to keep in mind: the portal is cached (`cacheable=true`), and 
 - **Overdue alerts:** a scheduled flow that queries `Portal_Status__c = 'Overdue'` can notify inspectors weekly.
 - **Region changes:** edit the `State_Assignment__mdt` records in Setup. No deploy is needed.
 
-## 8. Automation design
+## 9. Automation design
 
 - **One trigger per object:** `InspectionTrigger` delegates to `InspectionTriggerHandler`, which uses `switch on Trigger.operationType`.
 - **Bulk-safe:** each service runs a fixed number of queries per batch, no matter how many records are in it (assignment: 2, rollup: 1 + 1 DML, scheduling: 1 + 1 DML).
@@ -263,7 +292,7 @@ Guest-site limits to keep in mind: the portal is cached (`cacheable=true`), and 
 - **Bypass:** `InspectionTriggerHandler.bypass = true` turns automation off for special data loads.
 - **Why Apex rather than Flow:** the logic crosses records (latest result per facility, an open-inspection check, bulk dedupe), which is easier to test in Apex, and it counts toward deployable code coverage. A Flow would work for simpler variations.
 
-## 9. Deployment and environment
+## 10. Deployment and environment
 
 Target: a Salesforce Developer Edition org. See [README](../README.md#setup) for the commands.
 
@@ -274,13 +303,14 @@ Target: a Salesforce Developer Edition org. See [README](../README.md#setup) for
 5. Assign `Inspection_Portal_Guest` to the site guest user, then deploy `site-config` (the guest sharing rule).
 6. Optionally put real inspector usernames into `State_Assignment__mdt`.
 
-## 10. Testing strategy
+## 11. Testing strategy
 
 | Test class | Covers |
 | --- | --- |
 | `InspectionTriggerHandlerTest` | Pass → +365 annual; fail → +30 re-inspection; no duplicate when an open inspection exists; overdue formula; delete and undelete rollup; 150-record bulk insert; bypass |
 | `InspectorAssignmentServiceTest` | Owner fallback; user-selected inspector kept; unknown state; code/name lookup |
 | `FacilityPortalControllerTest` | Runs as a user with only the guest permission set: unlisted facilities hidden; text/state/status/type filters; literal `%`; no internal fields in serialized JSON; friendly error when access is missing; filter options |
+| `InspectionInsightsControllerTest` | Runs as a guest-equivalent user: KPI math, all 50 states, quarter bucketing, multi-select deficiency counts, overdue aging, facility-type filter, unlisted facilities excluded, no IDs or internal fields in the JSON |
 | `InspectionSampleDataTest` | Generator creates facilities with exactly one open inspection each, and reruns cleanly |
 
 **Manual guest checklist** (in an incognito window):
@@ -290,7 +320,7 @@ Target: a Salesforce Developer Edition org. See [README](../README.md#setup) for
 - The browser network tab shows no `Inspector` or `Internal_Notes` values in any response.
 - Unchecking *Publicly Listed* on a facility removes it from the portal.
 
-## 11. Design decisions
+## 12. Design decisions
 
 | Decision | Chosen | Alternative | Why |
 | --- | --- | --- | --- |
@@ -301,7 +331,7 @@ Target: a Salesforce Developer Edition org. See [README](../README.md#setup) for
 | Overdue status | Formula field | Nightly batch job | Always current with no scheduled job; filterable in SOQL and reports |
 | Guest data access | Sharing rule + USER_MODE | `without sharing` controller | Uses platform enforcement instead of hand-written checks |
 
-## 12. Risks and future enhancements
+## 13. Risks and future enhancements
 
 | Risk | Mitigation |
 | --- | --- |

@@ -1,0 +1,12 @@
+{
+  "type" : "sfdc_cms__route",
+  "title" : "Insights",
+  "contentBody" : {
+    "activeViewId" : "insights",
+    "configurationTags" : [ ],
+    "pageAccess" : "UseParent",
+    "routeType" : "custom-insights",
+    "urlPrefix" : "insights"
+  },
+  "urlName" : "insights"
+}

@@ -51,6 +51,10 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Deficiency_Areas__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Public_Summary__c</field>
             </layoutItems>
             <layoutItems>

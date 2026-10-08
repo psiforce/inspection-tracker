@@ -1,4 +1,5 @@
 import { LightningElement, api, wire } from "lwc";
+import basePath from "@salesforce/community/basePath";
 import searchFacilities from "@salesforce/apex/FacilityPortalController.searchFacilities";
 import getFilterOptions from "@salesforce/apex/FacilityPortalController.getFilterOptions";
 import { statusPillClass, formatDate } from "c/inspectionStatus";
@@ -33,7 +34,28 @@ export default class FacilityInspectionPortal extends LightningElement {
   }
 
   connectedCallback() {
+    // The National Insights state map links here with ?state=<state name>.
+    const state = this.stateFromUrl();
+    if (state) {
+      this.filters = { ...this.filters, state };
+    }
     this.loadFacilities();
+  }
+
+  stateFromUrl() {
+    try {
+      return new URLSearchParams(window.location.search).get("state") || "";
+    } catch {
+      return "";
+    }
+  }
+
+  get initialState() {
+    return this.filters.state;
+  }
+
+  get insightsUrl() {
+    return `${basePath || ""}/insights`;
   }
 
   disconnectedCallback() {

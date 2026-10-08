@@ -5,6 +5,10 @@
         <visible>true</visible>
     </applicationVisibilities>
     <classAccesses>
+        <apexClass>InspectionInsightsController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>FacilityPortalController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -51,6 +55,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Account.Inspection_Status__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Inspection__c.Deficiency_Areas__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

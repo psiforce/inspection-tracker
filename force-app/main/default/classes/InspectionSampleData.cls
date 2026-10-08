@@ -390,10 +390,12 @@ public with sharing class InspectionSampleData {
     String status,
     Date completed
   ) {
-    String area = FINDING_AREAS[nextInt(FINDING_AREAS.size())];
+    Integer areaIndex = nextInt(FINDING_AREAS.size());
+    String area = FINDING_AREAS[areaIndex];
     Integer score;
     String summary;
     String notes;
+    String deficiencyAreas = null;
     if (status == InspectionConstants.STATUS_PASSED) {
       score = 88 + nextInt(13);
       summary = 'The facility met all state licensing standards. No deficiencies were cited.';
@@ -416,6 +418,21 @@ public with sharing class InspectionSampleData {
         '. A re-inspection is required within 30 days.';
       notes = 'Escalated to the regional manager. Facility contact acknowledged the findings.';
     }
+    if (status != InspectionConstants.STATUS_PASSED) {
+      deficiencyAreas = picklistValue(area);
+      // Odd-scored failures also cite a second area. Derived from values already drawn,
+      // so the random sequence (and therefore the rest of the data set) is unchanged.
+      if (
+        InspectionConstants.FAILING_STATUSES.contains(status) &&
+        Math.mod(score, 2) == 1
+      ) {
+        deficiencyAreas +=
+          ';' +
+          picklistValue(
+            FINDING_AREAS[Math.mod(areaIndex + 3, FINDING_AREAS.size())]
+          );
+      }
+    }
     return new Inspection__c(
       Facility__c = facility.Id,
       Inspection_Type__c = inspectionType,
@@ -424,8 +441,19 @@ public with sharing class InspectionSampleData {
       Completed_Date__c = completed,
       Score__c = score,
       Public_Summary__c = summary,
-      Internal_Notes__c = notes
+      Internal_Notes__c = notes,
+      Deficiency_Areas__c = deficiencyAreas
     );
+  }
+
+  /** 'fire and life safety' -> 'Fire and Life Safety' (the Deficiency_Areas__c value). */
+  @TestVisible
+  private static String picklistValue(String area) {
+    List<String> words = new List<String>();
+    for (String word : area.split(' ')) {
+      words.add(word == 'and' ? word : word.capitalize());
+    }
+    return String.join(words, ' ');
   }
 
   private String pickFacilityType() {

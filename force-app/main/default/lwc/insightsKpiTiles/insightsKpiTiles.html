@@ -1,0 +1,11 @@
+<template>
+  <ul class="tiles" aria-label="National summary">
+    <template for:each={tiles} for:item="tile">
+      <li key={tile.key} class={tile.cls}>
+        <span class="tile__label">{tile.label}</span>
+        <span class="tile__value">{tile.value}</span>
+        <span class="tile__detail">{tile.detail}</span>
+      </li>
+    </template>
+  </ul>
+</template>
