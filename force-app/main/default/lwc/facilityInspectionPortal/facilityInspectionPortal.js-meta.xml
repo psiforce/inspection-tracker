@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Facility Inspection Portal</masterLabel>
+    <description>Public search, US map and inspection history for medical facilities.</description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="heading" type="String" label="Heading" default="Medical Facility Inspections" />
+            <property
+                name="introText"
+                type="String"
+                label="Intro text"
+                default="Search licensed medical facilities and check the result of their most recent yearly inspection."
+            />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

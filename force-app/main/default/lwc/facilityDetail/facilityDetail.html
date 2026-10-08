@@ -1,0 +1,85 @@
+<template>
+  <div class="detail">
+    <lightning-button
+      class="detail__back"
+      variant="base"
+      label="Back to results"
+      icon-name="utility:chevronleft"
+      onclick={handleBack}
+    ></lightning-button>
+
+    <template lwc:if={isLoading}>
+      <div class="detail__loading">
+        <lightning-spinner
+          alternative-text="Loading facility"
+          size="small"
+        ></lightning-spinner>
+      </div>
+    </template>
+
+    <template lwc:if={error}>
+      <p class="detail__error" role="alert">{error}</p>
+    </template>
+
+    <template lwc:if={facility}>
+      <header class="detail__header">
+        <p class="detail__eyebrow">{facility.facilityType}</p>
+        <h2 class="detail__name">{facility.name}</h2>
+        <p class="detail__address">{address}</p>
+        <span class={statusClass}>{statusLabel}</span>
+      </header>
+
+      <dl class="facts">
+        <div class="facts__row">
+          <dt>Last inspection</dt>
+          <dd>{lastInspection}</dd>
+        </div>
+        <div class="facts__row">
+          <dt>Next inspection due</dt>
+          <dd>
+            {nextDue}
+            <span class="facts__hint">{nextDueHint}</span>
+          </dd>
+        </div>
+        <template lwc:if={facility.licenseNumber}>
+          <div class="facts__row">
+            <dt>License number</dt>
+            <dd>{facility.licenseNumber}</dd>
+          </div>
+        </template>
+        <template lwc:if={facility.region}>
+          <div class="facts__row">
+            <dt>Region</dt>
+            <dd>{facility.region}</dd>
+          </div>
+        </template>
+      </dl>
+
+      <h3 class="detail__section">Inspection history</h3>
+      <template lwc:if={hasHistory}>
+        <ol class="history">
+          <template for:each={history} for:item="item">
+            <li key={item.id} class="history__item">
+              <div class="history__top">
+                <span class="history__date">{item.dateLabel}</span>
+                <span class={item.pillClass}>{item.status}</span>
+              </div>
+              <p class="history__meta">
+                {item.inspectionType} inspection · {item.inspectionNumber}
+                <template lwc:if={item.scoreLabel}>
+                  · {item.scoreLabel}</template
+                >
+              </p>
+              <template lwc:if={item.publicSummary}>
+                <p class="history__summary">{item.publicSummary}</p>
+              </template>
+            </li>
+          </template>
+        </ol>
+      </template>
+      <template lwc:else>
+        <p class="detail__empty">No inspections on record yet.</p>
+      </template>
+    </template>
+  </div>
+</template>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Scheduled</fullName>
+        <default>false</default>
+        <label>Scheduled</label>
+    </customValue>
+    <customValue>
+        <fullName>In Progress</fullName>
+        <default>false</default>
+        <label>In Progress</label>
+    </customValue>
+    <customValue>
+        <fullName>Passed</fullName>
+        <default>false</default>
+        <label>Passed</label>
+    </customValue>
+    <customValue>
+        <fullName>Passed with Conditions</fullName>
+        <default>false</default>
+        <label>Passed with Conditions</label>
+    </customValue>
+    <customValue>
+        <fullName>Failed</fullName>
+        <default>false</default>
+        <label>Failed</label>
+    </customValue>
+    <customValue>
+        <fullName>Re-inspection Required</fullName>
+        <default>false</default>
+        <label>Re-inspection Required</label>
+    </customValue>
+    <description>Lifecycle and result values shared by Inspection__c.Status__c and Account.Inspection_Status__c.</description>
+    <masterLabel>Inspection Status</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

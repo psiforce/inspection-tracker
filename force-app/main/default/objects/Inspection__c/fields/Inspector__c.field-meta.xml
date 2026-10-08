@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Inspector__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Assigned automatically from State_Assignment__mdt by facility state. Internal only.</description>
+    <label>Inspector</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Inspections</relationshipName>
+    <required>false</required>
+    <type>Lookup</type>
+</CustomField>

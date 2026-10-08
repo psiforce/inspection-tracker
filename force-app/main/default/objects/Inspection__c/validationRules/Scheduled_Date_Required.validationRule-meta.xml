@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Scheduled_Date_Required</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISBLANK(Scheduled_Date__c)</errorConditionFormula>
+    <errorDisplayField>Scheduled_Date__c</errorDisplayField>
+    <errorMessage>Enter the date this inspection is scheduled for.</errorMessage>
+</ValidationRule>

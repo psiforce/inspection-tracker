@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Publicly_Listed__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>When checked, the facility is visible on the public inspection portal (drives the guest sharing rule).</description>
+    <inlineHelpText>Uncheck to hide this facility from the public portal.</inlineHelpText>
+    <label>Publicly Listed</label>
+    <type>Checkbox</type>
+</CustomField>

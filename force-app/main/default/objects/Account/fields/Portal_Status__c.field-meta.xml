@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Portal_Status__c</fullName>
+    <description>Status shown to the public: Overdue when the next inspection due date has passed, otherwise the latest inspection result.</description>
+    <formula>IF(AND(NOT(ISBLANK(Next_Inspection_Due__c)), Next_Inspection_Due__c &lt; TODAY()), "Overdue", IF(ISPICKVAL(Inspection_Status__c, ""), "Not Yet Inspected", TEXT(Inspection_Status__c)))</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <label>Portal Status</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

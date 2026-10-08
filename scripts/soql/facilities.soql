@@ -1,0 +1,5 @@
+SELECT Name, Facility_Type__c, BillingState, Portal_Status__c, Last_Inspection_Date__c, Next_Inspection_Due__c
+FROM Account
+WHERE RecordType.DeveloperName = 'Medical_Facility'
+ORDER BY Next_Inspection_Due__c
+LIMIT 50

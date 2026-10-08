@@ -1,0 +1,91 @@
+<template>
+  <div class="portal">
+    <header class="portal__header">
+      <p class="portal__eyebrow">Public inspection records</p>
+      <h1 class="portal__title">{heading}</h1>
+      <p class="portal__intro">{introText}</p>
+    </header>
+
+    <section class="portal__filters" aria-label="Search and filters">
+      <c-facility-search-filters
+        options={filterOptions}
+        onfilterchange={handleFilterChange}
+      ></c-facility-search-filters>
+    </section>
+
+    <ul class="stats" aria-label="Summary of facilities shown">
+      <template for:each={stats} for:item="stat">
+        <li key={stat.key} class={stat.cls}>
+          <span class="stat__value">{stat.value}</span>
+          <span class="stat__label">{stat.label}</span>
+        </li>
+      </template>
+    </ul>
+
+    <template lwc:if={error}>
+      <p class="portal__error" role="alert">{error}</p>
+    </template>
+
+    <div class="portal__body">
+      <section class="portal__map" aria-label="Map of facilities">
+        <c-facility-map
+          facilities={facilities}
+          selected-id={selectedId}
+          fit-to-results={fitToResults}
+          onfacilityselect={handleFacilitySelect}
+        ></c-facility-map>
+      </section>
+
+      <aside class="portal__panel" aria-live="polite">
+        <template lwc:if={hasSelection}>
+          <c-facility-detail
+            facility-id={selectedId}
+            onclose={handleDetailClose}
+          ></c-facility-detail>
+        </template>
+        <template lwc:else>
+          <div class="results__head">
+            <h2 class="results__title">Results</h2>
+            <span class="results__count">{resultCountLabel}</span>
+          </div>
+          <template lwc:if={isLoading}>
+            <div class="results__loading">
+              <lightning-spinner
+                alternative-text="Searching facilities"
+                size="small"
+              ></lightning-spinner>
+            </div>
+          </template>
+          <template lwc:if={hasResults}>
+            <ul class="results">
+              <template for:each={resultItems} for:item="item">
+                <li key={item.id}>
+                  <button
+                    class="result"
+                    data-id={item.id}
+                    onclick={handleListSelect}
+                  >
+                    <span class="result__top">
+                      <span class="result__name">{item.name}</span>
+                      <span class={item.pillClass}>{item.statusLabel}</span>
+                    </span>
+                    <span class="result__meta"
+                      >{item.facilityType} · {item.location}</span
+                    >
+                    <span class="result__meta">{item.lastLabel}</span>
+                  </button>
+                </li>
+              </template>
+            </ul>
+          </template>
+          <template lwc:if={showEmpty}>
+            <p class="results__empty">
+              No facilities match these filters. Try a different state or clear
+              the search.
+            </p>
+          </template>
+        </template>
+      </aside>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,81 @@
+{
+  "type": "sfdc_cms__view",
+  "title": "Home",
+  "contentBody": {
+    "component": {
+      "children": [
+        {
+          "children": [
+            {
+              "attributes": {
+                "backgroundImageConfig": "",
+                "backgroundImageOverlay": "rgba(0,0,0,0)",
+                "componentSpacerSize": "",
+                "layoutDirectionDesktop": "row",
+                "layoutDirectionMobile": "column",
+                "layoutDirectionTablet": "column",
+                "maxContentWidth": "",
+                "sectionColumnGutterWidth": "",
+                "sectionConfig": "{\"UUID\":\"942c7693-2a20-4405-8923-5b23781a66be\",\"columns\":[{\"UUID\":\"ab794798-33f0-4531-b6d0-33a24b12179a\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+                "sectionMinHeight": "",
+                "sectionVerticalAlign": "flex-start"
+              },
+              "children": [
+                {
+                  "children": [
+                    {
+                      "attributes": {
+                        "heading": "Medical Facility Inspections",
+                        "introText": "Search licensed medical facilities and check the result of their most recent yearly inspection."
+                      },
+                      "definition": "c:facilityInspectionPortal",
+                      "id": "5f0c2a8e-6b1d-4e57-9a3c-2d7e1b4f8a90",
+                      "type": "component"
+                    }
+                  ],
+                  "id": "ab794798-33f0-4531-b6d0-33a24b12179a",
+                  "name": "col1",
+                  "title": "Column 1",
+                  "type": "region"
+                }
+              ],
+              "definition": "community_layout:section",
+              "id": "942c7693-2a20-4405-8923-5b23781a66be",
+              "type": "component"
+            }
+          ],
+          "id": "d3857e2b-7290-441e-97e4-0a7d3e663f58",
+          "name": "content",
+          "title": "Content",
+          "type": "region"
+        },
+        {
+          "children": [
+            {
+              "attributes": {
+                "customHeadTags": "",
+                "description": "",
+                "pageTitle": "Facility Inspections",
+                "recordId": "{!recordId}"
+              },
+              "definition": "community_builder:seoAssistant",
+              "id": "5a79dd51-74b1-4898-b643-0f4fe930b4c6",
+              "type": "component"
+            }
+          ],
+          "id": "992fb1ef-3275-4e4c-bee1-f78f9c82179c",
+          "name": "sfdcHiddenRegion",
+          "title": "sfdcHiddenRegion",
+          "type": "region"
+        }
+      ],
+      "definition": "community_layout:sldsFlexibleLayout",
+      "id": "d861f269-008d-4398-b058-743ea59bf9fd",
+      "type": "component"
+    },
+    "dataProviders": [],
+    "themeLayoutType": "Inner",
+    "viewType": "home"
+  },
+  "urlName": "home"
+}

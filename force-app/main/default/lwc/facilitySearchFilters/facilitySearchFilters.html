@@ -1,0 +1,38 @@
+<template>
+  <div class="filters" role="search">
+    <lightning-input
+      class="filters__search"
+      type="search"
+      label="Search facilities"
+      placeholder="Name, city or ZIP code"
+      value={searchTerm}
+      onchange={handleSearch}
+    ></lightning-input>
+    <lightning-combobox
+      label="State"
+      value={state}
+      options={stateOptions}
+      onchange={handleState}
+    ></lightning-combobox>
+    <lightning-combobox
+      label="Inspection status"
+      value={status}
+      options={statusOptions}
+      onchange={handleStatus}
+    ></lightning-combobox>
+    <lightning-combobox
+      label="Facility type"
+      value={facilityType}
+      options={typeOptions}
+      onchange={handleType}
+    ></lightning-combobox>
+    <div class="filters__clear">
+      <lightning-button
+        label="Clear filters"
+        variant="base"
+        disabled={clearDisabled}
+        onclick={handleClear}
+      ></lightning-button>
+    </div>
+  </div>
+</template>

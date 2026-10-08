@@ -1,0 +1,27 @@
+<template>
+  <div class="map">
+    <template lwc:if={hasMarkers}>
+      <lightning-map
+        map-markers={markers}
+        center={center}
+        zoom-level={zoomLevel}
+        selected-marker-value={selectedId}
+        list-view="hidden"
+        onmarkerselect={handleMarkerSelect}
+      ></lightning-map>
+    </template>
+    <template lwc:else>
+      <div class="map__empty">
+        <p>No facilities match these filters.</p>
+      </div>
+    </template>
+  </div>
+  <ul class="legend" aria-label="Map legend">
+    <template for:each={legend} for:item="item">
+      <li key={item.label} class="legend__item">
+        <span class="legend__dot" style={item.style}></span>
+        {item.label}
+      </li>
+    </template>
+  </ul>
+</template>

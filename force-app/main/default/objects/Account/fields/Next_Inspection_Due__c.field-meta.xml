@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_Inspection_Due__c</fullName>
+    <description>Scheduled date of the next open inspection, or last inspection + 365 days. Maintained by InspectionTriggerHandler.</description>
+    <label>Next Inspection Due</label>
+    <required>false</required>
+    <type>Date</type>
+</CustomField>

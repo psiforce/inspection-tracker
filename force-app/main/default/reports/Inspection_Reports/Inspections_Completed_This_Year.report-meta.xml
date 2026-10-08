@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Account.Inspections__r$Name</field>
+    </columns>
+    <columns>
+        <field>Account$Name</field>
+    </columns>
+    <columns>
+        <field>Account$BillingState</field>
+    </columns>
+    <columns>
+        <field>Account.Inspections__r$Inspection_Type__c</field>
+    </columns>
+    <columns>
+        <field>Account.Inspections__r$Completed_Date__c</field>
+    </columns>
+    <columns>
+        <field>Account.Inspections__r$Score__c</field>
+    </columns>
+    <columns>
+        <field>Account.Inspections__r$Inspector__c</field>
+    </columns>
+    <description>Completed inspections this calendar year, grouped by result.</description>
+    <filter>
+        <criteriaItems>
+            <column>Account.Inspections__r$Status__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Passed,Passed with Conditions,Failed,Re-inspection Required</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Account.Inspections__r$Status__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Inspections Completed This Year</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Facilities_with_Inspections__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Account.Inspections__r$Completed_Date__c</dateColumn>
+        <interval>INTERVAL_CURY</interval>
+    </timeFrameFilter>
+</Report>
