@@ -2,7 +2,7 @@ import { LightningElement, api } from "lwc";
 import { RESULT_COLORS, formatScore, niceMax } from "c/inspectionStatus";
 
 // SVG coordinate system (scaled to the container width).
-const W = 640;
+const W = 1040;
 const LEFT = 40;
 const RIGHT = 12;
 const COLUMNS_TOP = 24;
@@ -107,7 +107,7 @@ export default class InsightsTrendChart extends LightningElement {
 
   get columns() {
     const band = this.band;
-    const barW = Math.min(28, band * 0.62);
+    const barW = Math.min(40, band * 0.6);
     return this.list.map((q, index) => {
       const x = LEFT + band * index + (band - barW) / 2;
       let base = this.yCount(0);

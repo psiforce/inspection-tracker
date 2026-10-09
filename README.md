@@ -11,6 +11,8 @@ Architecture, data model, security model and diagrams: [docs/Solution-Architectu
 
 How the project was built (datasets, prompts, iterations, learnings): [docs/Project-Documentation.md](docs/Project-Documentation.md)
 
+Video: a 5-minute narrated explainer ([video/FDE-Inspection-Tracker-Explainer.mp4](video/FDE-Inspection-Tracker-Explainer.mp4)) and a Loom recording script ([video/Loom-Script.md](video/Loom-Script.md))
+
 ## Project layout
 
 | Path | Contents |
